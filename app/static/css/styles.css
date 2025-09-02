@@ -1,0 +1,556 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+}
+
+html, body {
+    height: 100vh;
+    width: 100vw;
+    overflow: hidden;
+    position: fixed;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    cursor: none;
+}
+
+.fullscreen-container {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+}
+
+.header {
+    height: 80px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 2rem;
+    background: rgba(0,0,0,0.3);
+    backdrop-filter: blur(10px);
+}
+
+.status {
+    font-size: 1.2rem;
+    font-weight: 600;
+    text-align: center;
+    flex: 1;
+}
+
+.gallery-btn {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    border: none;
+    background: rgba(255,255,255,0.2);
+    color: white;
+    font-size: 1.5rem;
+    cursor: pointer;
+    backdrop-filter: blur(10px);
+    transition: all 0.3s ease;
+    touch-action: manipulation;
+}
+
+.gallery-btn:active {
+    transform: scale(0.95);
+    background: rgba(255,255,255,0.3);
+}
+
+.main-content {
+    flex: 1;
+    display: flex;
+    position: relative;
+    width: 100vw;
+    height: calc(100vh - 80px);
+}
+
+.preview-section {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1;
+}
+
+.preview-container {
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.9);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+#preview {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.controls-overlay {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    max-width: 350px;
+}
+
+.settings-dropdown {
+    background: rgba(0,0,0,0.8);
+    backdrop-filter: blur(20px);
+    border-radius: 15px;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.settings-header {
+    padding: 15px 20px;
+    background: rgba(255,255,255,0.1);
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: 600;
+    font-size: 1.1rem;
+    touch-action: manipulation;
+}
+
+.settings-header:active {
+    transform: scale(0.98);
+}
+
+.dropdown-arrow {
+    transition: transform 0.3s ease;
+    font-size: 1.2rem;
+}
+
+.settings-dropdown.open .dropdown-arrow {
+    transform: rotate(180deg);
+}
+
+.settings-content {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+    padding: 0 20px;
+}
+
+.settings-dropdown.open .settings-content {
+    max-height: 400px;
+    padding: 20px;
+}
+
+.setting-group {
+    margin-bottom: 20px;
+}
+
+.setting-group:last-child {
+    margin-bottom: 0;
+}
+
+.setting-label {
+    font-weight: 600;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    opacity: 0.9;
+    letter-spacing: 1px;
+    margin-bottom: 10px;
+    display: block;
+}
+
+.button-group {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.option-btn {
+    flex: 1;
+    min-width: 80px;
+    padding: 8px 12px;
+    border: none;
+    border-radius: 8px;
+    background: rgba(255,255,255,0.1);
+    color: white;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 0.85rem;
+    font-weight: 600;
+    touch-action: manipulation;
+    text-align: center;
+}
+
+.option-btn.active {
+    background: rgba(255,255,255,0.3);
+    transform: scale(1.05);
+    box-shadow: 0 2px 8px rgba(255,255,255,0.2);
+}
+
+.option-btn:active {
+    transform: scale(0.95);
+}
+
+.floating-info {
+    background: rgba(0,0,0,0.8);
+    backdrop-filter: blur(20px);
+    padding: 15px 20px;
+    border-radius: 15px;
+    text-align: center;
+    border: 2px solid;
+}
+
+.info-panel {
+    border-color: #00d2d3;
+    display: none;
+}
+
+.auto-mode-panel {
+    border-color: #2ecc71;
+    display: none;
+}
+
+.progress-bar {
+    width: 100%;
+    height: 8px;
+    background: rgba(255,255,255,0.2);
+    border-radius: 4px;
+    margin-top: 10px;
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #2ecc71, #27ae60);
+    width: 0%;
+    transition: width 0.3s ease;
+    border-radius: 4px;
+}
+
+.action-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.btn {
+    width: 100%;
+    padding: 15px 20px;
+    border: none;
+    border-radius: 15px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    touch-action: manipulation;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    min-width: 200px;
+}
+
+.btn-primary {
+    background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+    color: white;
+    box-shadow: 0 8px 20px rgba(255,107,107,0.4);
+}
+
+.btn-secondary {
+    background: linear-gradient(45deg, #4834d4, #686de0);
+    color: white;
+    box-shadow: 0 8px 20px rgba(72,52,212,0.4);
+}
+
+.btn-success {
+    background: linear-gradient(45deg, #00d2d3, #54a0ff);
+    color: white;
+    box-shadow: 0 8px 20px rgba(0,210,211,0.4);
+}
+
+.btn-warning {
+    background: linear-gradient(45deg, #ffa726, #ff9800);
+    color: white;
+    box-shadow: 0 8px 20px rgba(255,167,38,0.4);
+}
+
+.btn:active:not(:disabled) {
+    transform: scale(0.95);
+}
+
+.btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.countdown {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 12rem;
+    font-weight: bold;
+    color: #ff6b6b;
+    text-shadow: 0 0 50px rgba(255,107,107,0.8);
+    z-index: 2000;
+    display: none;
+    pointer-events: none;
+}
+
+.photo-selection-screen {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0,0,0,0.95);
+    z-index: 1500;
+    padding: 2rem;
+    overflow-y: auto;
+}
+
+.selection-header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.selection-header h2 {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+}
+
+.selection-instruction {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+    color: #fff;
+}
+
+.selection-counter {
+    font-size: 1.3rem;
+    color: #00d2d3;
+    font-weight: bold;
+}
+
+.photos-grid {
+    display: grid;
+    gap: 1.5rem;
+    max-width: 1400px;
+    margin: 0 auto 3rem;
+    padding: 2rem;
+}
+
+.photos-grid.double-selection {
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+}
+
+.photos-grid.quad-selection {
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+}
+
+.photos-grid.strip-selection {
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+}
+
+.photo-option {
+    position: relative;
+    cursor: pointer;
+    border-radius: 20px;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    background: rgba(255,255,255,0.1);
+    aspect-ratio: 4/3;
+    touch-action: manipulation;
+}
+
+.photo-option img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 20px;
+}
+
+.photo-option.selected {
+    border: 4px solid #00d2d3;
+    transform: scale(1.05);
+    box-shadow: 0 15px 40px rgba(0,210,211,0.6);
+}
+
+.photo-option:active {
+    transform: scale(0.98);
+}
+
+.photo-option.selected:active {
+    transform: scale(1.02);
+}
+
+.photo-option .selection-indicator {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: rgba(0,0,0,0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: bold;
+    font-size: 1.2rem;
+    opacity: 0.8;
+    transition: all 0.3s ease;
+}
+
+.photo-option.selected .selection-indicator {
+    opacity: 1;
+    background: #00d2d3;
+    transform: scale(1.1);
+}
+
+.selection-controls {
+    text-align: center;
+    margin-top: 3rem;
+    display: flex;
+    gap: 2rem;
+    justify-content: center;
+}
+
+.selection-controls .btn {
+    width: 300px;
+    padding: 2rem;
+    font-size: 1.4rem;
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 2000;
+    left: 0;
+    top: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0,0,0,0.95);
+    backdrop-filter: blur(5px);
+}
+
+.modal-content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(255,255,255,0.1);
+    padding: 3rem;
+    border-radius: 20px;
+    backdrop-filter: blur(20px);
+    max-width: 90vw;
+    max-height: 90vh;
+    overflow: auto;
+    width: 800px;
+}
+
+.close {
+    color: white;
+    float: right;
+    font-size: 2rem;
+    font-weight: bold;
+    cursor: pointer;
+    margin-bottom: 2rem;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.2);
+    touch-action: manipulation;
+}
+
+.close:active {
+    transform: scale(0.9);
+}
+
+.gallery-item {
+    margin: 1.5rem 0;
+    padding: 1.5rem;
+    background: rgba(255,255,255,0.1);
+    border-radius: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.gallery-item-info h3 {
+    margin-bottom: 0.5rem;
+    font-size: 1.2rem;
+}
+
+.gallery-item-info p {
+    margin: 0.3rem 0;
+    opacity: 0.8;
+}
+
+/* Final photo display */
+.final-photo {
+    max-width: 95%;
+    max-height: 85%;
+    border-radius: 20px;
+    box-shadow: 0 30px 60px rgba(0,0,0,0.5);
+}
+
+/* Responsive design */
+@media (max-width: 1200px) {
+    .controls-overlay {
+        top: 10px;
+        right: 10px;
+        max-width: 300px;
+    }
+
+    .btn {
+        padding: 12px 16px;
+        font-size: 1rem;
+        min-width: 180px;
+    }
+}
+
+@media (max-width: 768px) {
+    .header {
+        height: 60px;
+        padding: 0 1rem;
+    }
+
+    .controls-overlay {
+        position: fixed;
+        top: 70px;
+        left: 10px;
+        right: 10px;
+        max-width: none;
+        width: auto;
+    }
+
+    .action-buttons {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+    }
+
+    .btn {
+        min-width: auto;
+        padding: 10px;
+        font-size: 0.9rem;
+    }
+}
